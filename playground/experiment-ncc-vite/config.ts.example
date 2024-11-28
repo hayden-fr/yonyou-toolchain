@@ -1,0 +1,7 @@
+export default {
+  buildEntryPath: ["./src/domain/*/*/*/index.js"],
+  extendBuildEntryPath: ["./src/NCCExtend/domain/*/*/*/index.js"],
+  buildWithoutHTML: ["uapbd/refer", "uap/refer"],
+  proxy: "",
+  devPort: 3006,
+};
