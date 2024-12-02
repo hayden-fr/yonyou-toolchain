@@ -1,0 +1,41 @@
+{
+  "name": "vite-plugin-ncc-multi-page",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "unbuild --stub",
+    "build": "unbuild"
+  },
+  "keywords": [
+    "yonyou",
+    "nccloud",
+    "vite"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hayden-fr/yonyou-toolchain.git",
+    "directory": "packages/plugin-ncc-multi-page"
+  },
+  "author": "hayden <48267247+hayden-fr@users.noreply.github.com>",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "unbuild": "^2.0.0"
+  },
+  "peerDependencies": {
+    "vite": "^6.0.0"
+  }
+}
