@@ -2,10 +2,17 @@
   "name": "yonyou-toolchain",
   "version": "0.0.0",
   "description": "",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "pnpm -r --parallel --filter='./packages/*' run dev"
   },
-  "keywords": ["yonyou"],
+  "keywords": [
+    "yonyou"
+  ],
   "author": "hayden <48267247+hayden-fr@users.noreply.github.com>",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^22.10.1",
+    "typescript": "^5.7.2"
+  }
 }
