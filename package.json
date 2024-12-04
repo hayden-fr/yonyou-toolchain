@@ -1,18 +1,40 @@
 {
   "name": "yonyou-toolchain",
-  "version": "0.0.0",
-  "description": "",
+  "private": true,
   "type": "module",
+  "engines": {},
   "scripts": {
-    "dev": "pnpm -r --parallel --filter='./packages/*' run dev"
+    "preinstall": "npx only-allow pnpm",
+    "postinstall": "simple-git-hooks",
+    "dev": "pnpm -r --parallel --filter='./packages/*' run dev",
+    "build": "pnpm -r --parallel --filter='./packages/*' run build"
   },
   "keywords": [
     "yonyou"
   ],
-  "author": "hayden <48267247+hayden-fr@users.noreply.github.com>",
-  "license": "ISC",
-  "dependencies": {
+  "author": "Hayden",
+  "devDependencies": {
     "@types/node": "^22.10.1",
+    "eslint": "^9.16.0",
+    "globals": "^15.13.0",
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.4.2",
+    "simple-git-hooks": "^2.11.1",
     "typescript": "^5.7.2"
-  }
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm exec lint-staged --concurrent false"
+  },
+  "lint-staged": {
+    "*": [
+      "prettier --write --cache --ignore-unknown"
+    ],
+    "packages/*/{src,types}/**/*.ts": [
+      "eslint --cache --fix"
+    ],
+    "packages/**/*.d.ts": [
+      "eslint --cache --fix"
+    ]
+  },
+  "packageManager": "pnpm@9.14.4"
 }
