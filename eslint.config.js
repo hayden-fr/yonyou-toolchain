@@ -1,7 +1,7 @@
 // @ts-check
 import eslint from '@eslint/js'
-import tsEslint from 'typescript-eslint'
 import globals from 'globals'
+import tsEslint from 'typescript-eslint'
 
 export default tsEslint.config(
   {
