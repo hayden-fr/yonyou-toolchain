@@ -26,3 +26,7 @@ dist-ssr
 # Environment files
 .env
 .env.*
+
+# Multi page configs
+multi.config.ts
+multi.config.js
