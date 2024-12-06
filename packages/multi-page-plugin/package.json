@@ -32,7 +32,9 @@
   },
   "author": "hayden <48267247+hayden-fr@users.noreply.github.com>",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "globby": "^14.0.2"
+  },
   "devDependencies": {
     "unbuild": "^2.0.0"
   },
