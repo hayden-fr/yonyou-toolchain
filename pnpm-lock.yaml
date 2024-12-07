@@ -51,9 +51,7 @@ importers:
         specifier: ^2.0.0
         version: 2.0.0(typescript@5.7.2)
 
-  packages/nc-lightapp-front: {}
-
-  packages/plugin-ncc-multi-page:
+  packages/multi-page-plugin:
     dependencies:
       globby:
         specifier: ^14.0.2
@@ -65,6 +63,8 @@ importers:
       unbuild:
         specifier: ^2.0.0
         version: 2.0.0(typescript@5.7.2)
+
+  packages/nc-lightapp-front: {}
 
   playground/ncc-multi-page:
     devDependencies:
@@ -109,7 +109,7 @@ importers:
         version: 6.0.2(@types/node@22.10.1)(jiti@2.4.1)(yaml@2.5.1)
       vite-plugin-ncc-multi-page:
         specifier: workspace:*
-        version: link:../../packages/plugin-ncc-multi-page
+        version: link:../../packages/multi-page-plugin
 
 packages:
 
