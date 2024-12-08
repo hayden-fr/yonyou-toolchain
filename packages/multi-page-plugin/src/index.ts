@@ -59,7 +59,7 @@ export default function viteMultiPagePlugin(
           const reqUrl = req.url
 
           if (reqUrl === '/') {
-            res.writeHead(302, { location: '/nccloud' })
+            res.writeHead(302, { location: '/nccloud/' })
             res.end()
             return
           }
