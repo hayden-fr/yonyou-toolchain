@@ -11,11 +11,11 @@ const PLUGIN_ROOT_DIR = path.dirname(__dirname)
 const TEMPLATE_DIR = joinPath(PLUGIN_ROOT_DIR, 'template')
 
 export interface UserConfig {
-  buildEntryPath: string[]
-  extendBuildEntryPath: string[]
-  buildWithoutHTML: string[]
-  proxyTarget: string
-  devPort: number
+  buildEntryPath?: string[]
+  extendBuildEntryPath?: string[]
+  buildWithoutHTML?: string[]
+  proxyTarget?: string
+  devPort?: number
 }
 
 export const defineConfig = (config: UserConfig) => config
@@ -45,7 +45,7 @@ export default function viteMultiPagePlugin(
       config() {
         return {
           server: {
-            port: config.devPort,
+            port: config.devPort ?? 3006,
             proxy: {
               '/nccloud': {
                 target: config.proxyTarget,
