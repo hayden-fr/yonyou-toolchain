@@ -1,4 +1,14 @@
-import { type PluginOption } from 'vite'
+import { globbySync } from 'globby'
+import fs from 'node:fs'
+import path from 'node:path'
+import { normalizePath, type PluginOption } from 'vite'
+
+const joinPath = (...paths: string[]) => {
+  return normalizePath(path.join(...paths))
+}
+
+const PLUGIN_ROOT_DIR = path.dirname(__dirname)
+const TEMPLATE_DIR = joinPath(PLUGIN_ROOT_DIR, 'template')
 
 export interface UserConfig {
   buildEntryPath: string[]
@@ -13,6 +23,22 @@ export const defineConfig = (config: UserConfig) => config
 export default function viteMultiPagePlugin(
   config: UserConfig,
 ): PluginOption[] {
+  const projectRoot = joinPath(process.cwd(), 'src')
+
+  const buildEntryPath = globbySync(config.buildEntryPath ?? [], {
+    cwd: projectRoot,
+  })
+
+  const buildEntryHtmlMap = Object.fromEntries(
+    buildEntryPath.map((filePath) => {
+      const extname = path.extname(filePath)
+      return [
+        joinPath('/nccloud/resources', filePath.replace(extname, '.html')),
+        joinPath('/src', filePath),
+      ]
+    }),
+  )
+
   return [
     {
       name: 'vite-plugin-multi-page-server',
@@ -38,9 +64,29 @@ export default function viteMultiPagePlugin(
             return
           }
 
+          if (reqUrl?.endsWith('.html')) {
+            if (reqUrl in buildEntryHtmlMap) {
+              const html = renderEntryHtml(buildEntryHtmlMap[reqUrl])
+              res.statusCode = 200
+              res.setHeader('Content-Type', 'text/html')
+              res.end(await server.transformIndexHtml(reqUrl, html))
+              return
+            }
+          }
+
           next()
         })
       },
     },
   ]
+}
+
+function renderEntryHtml(entryPath: string) {
+  const templateFilePath = joinPath(TEMPLATE_DIR, 'index.html')
+  const template = fs.readFileSync(templateFilePath, 'utf-8')
+
+  return template.replace(
+    '{{ entryScript }}',
+    `<script src="${entryPath}" type="module"></script>`,
+  )
 }
