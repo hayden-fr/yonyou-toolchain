@@ -42,6 +42,7 @@ export default function viteMultiPagePlugin(
   return [
     {
       name: 'vite-plugin-multi-page-server',
+      apply: 'serve',
       config() {
         return {
           server: {
