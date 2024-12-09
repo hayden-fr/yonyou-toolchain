@@ -21,8 +21,6 @@ export interface UserConfig {
   devPort?: number
 }
 
-export const defineConfig = (config: UserConfig) => config
-
 export default function viteMultiPagePlugin(
   config: UserConfig,
 ): PluginOption[] {
