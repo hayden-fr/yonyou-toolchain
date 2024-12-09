@@ -1,12 +1,15 @@
 import { globbySync } from 'globby'
 import fs from 'node:fs'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { normalizePath, type PluginOption } from 'vite'
 
 const joinPath = (...paths: string[]) => {
   return normalizePath(path.join(...paths))
 }
 
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 const PLUGIN_ROOT_DIR = path.dirname(__dirname)
 const TEMPLATE_DIR = joinPath(PLUGIN_ROOT_DIR, 'template')
 
