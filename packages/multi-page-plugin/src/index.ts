@@ -42,6 +42,25 @@ export default function viteMultiPagePlugin(
 
   return [
     {
+      name: 'vite-plugin-multi-page-fixed-react-optimizeDeps',
+      enforce: 'post',
+      config(originalConfig) {
+        if (originalConfig.optimizeDeps?.include) {
+          const viteReactOptimizeDeps = [
+            'react',
+            'react-dom',
+            'react/jsx-dev-runtime',
+            'react/jsx-runtime',
+          ]
+
+          originalConfig.optimizeDeps.include =
+            originalConfig.optimizeDeps.include.filter(
+              (item) => !viteReactOptimizeDeps.includes(item),
+            )
+        }
+      },
+    },
+    {
       name: 'vite-plugin-multi-page-server',
       apply: 'serve',
       config() {
