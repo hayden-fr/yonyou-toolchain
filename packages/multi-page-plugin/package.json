@@ -33,7 +33,8 @@
   "author": "hayden <48267247+hayden-fr@users.noreply.github.com>",
   "license": "ISC",
   "dependencies": {
-    "globby": "^14.0.2"
+    "globby": "^14.0.2",
+    "rollup": "^4.23.0"
   },
   "devDependencies": {
     "unbuild": "^2.0.0"

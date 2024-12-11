@@ -4,5 +4,5 @@ import multiPage from 'vite-plugin-ncc-multi-page'
 import config from './multi.config'
 
 export default defineConfig({
-  plugins: [multiPage(config), react()],
+  plugins: [multiPage(config), react({ jsxRuntime: 'classic' })],
 })

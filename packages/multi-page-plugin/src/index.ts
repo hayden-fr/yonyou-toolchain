@@ -2,7 +2,9 @@ import { globbySync } from 'globby'
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { normalizePath, type PluginOption } from 'vite'
+import { rollup } from 'rollup'
+import type { PluginOption, ResolvedConfig } from 'vite'
+import { normalizePath } from 'vite'
 
 const joinPath = (...paths: string[]) => {
   return normalizePath(path.join(...paths))
@@ -24,10 +26,10 @@ export interface UserConfig {
 export default function viteMultiPagePlugin(
   config: UserConfig,
 ): PluginOption[] {
-  const projectRoot = joinPath(process.cwd(), 'src')
+  const projectSource = joinPath(process.cwd(), 'src')
 
   const buildEntryPath = globbySync(config.buildEntryPath ?? [], {
-    cwd: projectRoot,
+    cwd: projectSource,
   })
 
   const buildEntryHtmlMap = Object.fromEntries(
@@ -39,6 +41,8 @@ export default function viteMultiPagePlugin(
       ]
     }),
   )
+
+  let resolvedConfig: ResolvedConfig
 
   return [
     {
@@ -57,6 +61,87 @@ export default function viteMultiPagePlugin(
             originalConfig.optimizeDeps.include.filter(
               (item) => !viteReactOptimizeDeps.includes(item),
             )
+        }
+      },
+    },
+    {
+      name: 'vite-plugin-multi-page-build',
+      apply: 'build',
+      enforce: 'post',
+      // config(config, env) {
+      //   return {
+      //     build: {
+      //       rollupOptions: {
+      //         external: ['react', 'react-dom'],
+      //         output: {
+      //           inlineDynamicImports: false,
+      //           format: 'umd',
+      //         },
+      //       },
+      //     },
+      //   }
+      // },
+      config() {
+        return {
+          build: {
+            rollupOptions: {
+              input: 'virtual:index.html',
+            },
+          },
+        }
+      },
+      configResolved(config) {
+        resolvedConfig = config
+      },
+      resolveId(id) {
+        if ('virtual:index.html' === id) {
+          return id
+        }
+      },
+      load(id) {
+        if ('virtual:index.html' === id) {
+          return `<!DOCTYPE html><html></html>`
+        }
+      },
+      // buildStart(options) {
+      //   options.input = Object.fromEntries(
+      //     buildEntryPath.map((filPath) => {
+      //       return [filPath, joinPath(projectSource, filPath)]
+      //     }),
+      //   )
+      //   // options.
+      // },
+      async generateBundle(_, bundle) {
+        for (const key in bundle) {
+          if (Object.prototype.hasOwnProperty.call(bundle, key)) {
+            delete bundle[key]
+          }
+        }
+
+        for (const entryPath of buildEntryPath) {
+          console.log(entryPath)
+          // console.log(
+          //   resolvedConfig.plugins.filter(
+          //     (p) => p.name !== 'vite-plugin-multi-page-build',
+          //   ),
+          // )
+          await rollup({
+            plugins: resolvedConfig.plugins.filter(
+              (p) => p.name !== 'vite-plugin-multi-page-build',
+            ),
+            input: joinPath(projectSource, entryPath),
+            output: {
+              format: 'umd',
+            },
+          })
+
+          // try {
+          //   await _bundle.generate({
+          //     format: 'umd',
+          //   })
+          // } catch (_) {
+          //   _bundle.close()
+          // }
         }
       },
     },
